@@ -1,0 +1,25 @@
+{
+  "name": "SemProj_Restaraunt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel src/main.html",
+    "build": "parcel build src/main.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LukeBonner/SemProj_Restaraunt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LukeBonner/SemProj_Restaraunt/issues"
+  },
+  "homepage": "https://github.com/LukeBonner/SemProj_Restaraunt#readme",
+  "dependencies": {
+    "parcel-bundler": "^1.12.5",
+    "typescript": "^4.2.3"
+  }
+}
