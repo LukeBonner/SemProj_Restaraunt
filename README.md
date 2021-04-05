@@ -3,6 +3,7 @@
 Currently the html of the project is divided into three sections
 
 # Login Section
+
 The login section will have two text areas and a button that should allow the user
 to enter their username and password.  Upon clicking the log in button, if the
 user's credentials are correct and login is successful, the login section will
@@ -10,6 +11,7 @@ then be hidden and the selection section will appear
 
 
 #Selection Section
+
 The selection section is meant to be split into three main chunks:
 
 -the filters chunk on the left, which will contain buttons and a search bar to
