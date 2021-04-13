@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <h1>Personal Budget</h1>
-    <h3>Luke Bonner</h3>
+    <h1>Restaurant and stuff</h1>
+
     <button v-if="userLoggedIn()" v-on:click="doLogout">Logout</button>
     <router-view></router-view>
   </div>
@@ -9,18 +9,18 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import BudgetCategory from './components/BudgetCategory.vue';
-import myExpense from './components/myExpense.vue';
-import AppLogin from './components/AppLogin.vue';
+import selectionBlock from './components/selectionBlock.vue';
+import checkoutBlock from './components/checkoutBlock.vue';
+import loginBlock from './components/loginBlock.vue';
 import {FirebaseFirestore} from "@firebase/firestore-types"
 import "firebase/firestore";
 import "firebase/auth";
 import { FirebaseAuth,UserCredential } from "@firebase/auth-types";
 @Component({
   components: {
-    BudgetCategory,
-    myExpense,
-    AppLogin
+    selectionBlock,
+    checkoutBlock,
+    loginBlock
 
   },
 })

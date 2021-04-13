@@ -17,7 +17,7 @@ import "firebase/firestore"
 @Component({})
 export default class myExpense extends Vue{
     readonly $appDB!: FirebaseFirestore;
-    private allSelections: any[] = [];
+    private allOrders: any[] = [];
     spendingDate: any;
     readonly $appAuth!: FirebaseAuth;
     private uid = "none"
@@ -33,11 +33,11 @@ export default class myExpense extends Vue{
     .collection(``)
     .orderBy("")       // Sort by category name
     .onSnapshot((qs: QuerySnapshot) => {
-      this.allSelections.splice(0);  // remove old data
+      this.allOrders.splice(0);  // remove old data
       qs.forEach((qds: QueryDocumentSnapshot) => {
         if (qds.exists){
           const catData = qds.data();
-          this.allSelections.push({
+          this.allOrders.push({
             
           });
         }

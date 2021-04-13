@@ -1,7 +1,13 @@
 <template>
     <div id="loginBlock">
         <section>
-           
+        <label for="email">Email</label>
+            <input type="text" name="email" id="email" v-model="userEmail"><br><br>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" v-model="userPassword"><br><br>
+            <button :disabled="noInput" type="button" id="signup" v-on:click="createAccount()">Signup</button>
+            <button :disabled="noInput" type="button" id="signin" v-on:click="authenticate()">Signin</button>
+             <div>{{message}}</div>
         </section>
     </div>
 </template>
@@ -32,7 +38,7 @@ export default class myExpense extends Vue{
         .createUserWithEmailAndPassword(this.userEmail, this.userPassword)
         .then((u: UserCredential) => {
             this.showMessage(`User create UID ${u.user?.uid}`);
-            this.$router.push({ path: "/category" });
+            this.$router.push({ path: "/Selection" });
             })
         .catch((err: any) => {
             this.showMessage(`Unable to create account ${err}`);
@@ -44,7 +50,7 @@ export default class myExpense extends Vue{
         .signInWithEmailAndPassword(this.userEmail, this.userPassword)
         .then((u: UserCredential) => {
             this.showMessage(`Login successful UID ${u.user?.uid}`);
-            this.$router.push({ path: "/expenses" });
+            this.$router.push({ path: "/Selection" });
         })
         .catch((err: any) => {
             this.showMessage(`Unable to login ${err}`);
