@@ -1,51 +1,52 @@
 <template>
   <div id="selectionBlock">
-    <section style="grid-area:filterBlock"></section>
+    <section style="grid-area:filterBlock">
+
+    </section>
     <section style="grid-area:displayBlock">
       <h3>Appetizers</h3>
       <table>
         <tr v-for="(z, pos) in allApps" :key="pos">
-            <td>{{z.name}}</td>
-            <td>{{z.description}}</td>
-            <td>{{z.price}}</td>
-            <td>{{z.image}}</td>
-            <td><button v-on:click=addToCart>add to order</button></td>
+            <td style="width:160px">{{z.name}}</td>
+            <td style="max-width:350px">{{z.description}}</td>
+            <td style="width:57px">${{z.price}}</td>
+            <td><button v-on:click="addToCart(z.name,z.price)">add to order</button></td>
         </tr>
       </table>
 
       <h3>Entrees</h3>
       <table>
         <tr v-for="(z, pos) in allEntrees" :key="pos">
-            <td>{{z.name}}</td>
-            <td>{{z.description}}</td>
-            <td>{{z.price}}</td>
-            <td>{{z.image}}</td>
-            <td><button v-on:click=addToCart>add to order</button></td>
+            <td style="width:160px">{{z.name}}</td>
+            <td style="max-width:350px">{{z.description}}</td>
+            <td style="width:57px">${{z.price}}</td>
+            <td><button v-on:click="addToCart(z.name,z.price)">add to order</button></td>
         </tr>
       </table>
 
       <h3>Desserts</h3>
       <table>
         <tr v-for="(z, pos) in allDesserts" :key="pos">
-            <td>{{z.name}}</td>
-            <td>{{z.description}}</td>
-            <td>{{z.price}}</td>
-            <td>{{z.image}}</td>
-            <td><button v-on:click=addToCart>add to order</button></td>
+            <td style="width:160px">{{z.name}}</td>
+            <td style="max-width:350px">{{z.description}}</td>
+            <td style="width:57px">${{z.price}}</td>
+            <td><button v-on:click="addToCart(z.name,z.price)">add to order</button></td>
         </tr>
       </table>
 
       <h3>Sides</h3>
       <table>
         <tr v-for="(z, pos) in allSides" :key="pos">
-            <td>{{z.name}}</td>
-            <td>{{z.description}}</td>
-            <td>{{z.price}}</td>
-            <td><button v-on:click=addToCart>add to order</button></td>
+            <td style="width:160px">{{z.name}}</td>
+            <td style="max-width:350px">{{z.description}}</td>
+            <td style="width:57px">${{z.price}}</td>
+            <td><button v-on:click="addToCart(z.name,z.price)">add to order</button></td>
         </tr>
       </table>
     </section>
-    <section style="grid-area:cartBlock"></section>
+    <section style="grid-area:cartBlock">
+
+    </section>
   </div>
 </template>
 
@@ -77,8 +78,13 @@ export default class BudgetCategory extends Vue {
     this.$appDB.collection(``).add({});
   }
 
-  addToCart(){
-    console.log("NYI");
+  addToCart(name: string, price: number){
+
+    this.allSelections.push({
+      name: name,
+      price: price,
+    })
+    console.log(this.allSelections);
   }
 
   mounted(): void {
@@ -155,13 +161,19 @@ export default class BudgetCategory extends Vue {
       });
 
 
-      console.log(this.allApps)
-      console.log(this.allEntrees)
-      console.log(this.allDesserts)
-      console.log(this.allSides)
+
       
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+
+td, tr{
+  border-style: solid;
+}
+
+table{
+  padding-left:600px;
+}
+</style>
