@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <h1>Restaurant and stuff</h1>
+  <div id="app" >
+    <h1 style="font-family: -webkit-pictograph">Restaurant and stuff</h1>
 
     <button v-if="userLoggedIn()" v-on:click="doLogout">Logout</button>
     <router-view></router-view>
@@ -15,6 +15,7 @@ import loginBlock from './components/loginBlock.vue';
 import {FirebaseFirestore} from "@firebase/firestore-types"
 import "firebase/firestore";
 import "firebase/auth";
+
 import { FirebaseAuth,UserCredential } from "@firebase/auth-types";
 @Component({
   components: {
@@ -44,7 +45,7 @@ export default class App extends Vue {
     // Just for debugging, you may delete the following two
     // lines after it is confirmed that this.$appDB is
     // initialized correctly
-    console.log("API Key", this.$appDB.app.options_.apiKey);
+    console.log("initialized");
   }
 }
 </script>
