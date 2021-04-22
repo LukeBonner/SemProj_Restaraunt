@@ -1,6 +1,6 @@
 <template>
   <div id="app" >
-    <h1 style="font-family: -webkit-pictograph">Restaurant and stuff</h1>
+    <h1 style="color:white; text-shadow: 0 0 3px black; font-weight: normal;">Restaurant and stuff</h1>
 
     <button v-if="userLoggedIn()" v-on:click="doLogout">Logout</button>
     <router-view></router-view>
@@ -58,5 +58,11 @@ export default class App extends Vue {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+body {
+  background-image: url("~@/assets/image.jpg");
+  background-size: 100%;
+  background-attachment: fixed;
 }
 </style>

@@ -72,19 +72,19 @@
         </tr>
       </table>
     </section>
-    <section style="grid-area:cartBlock" class="column">
+    <section style="grid-area:cartBlock; color: white;" class="column">
       <h3>Cart</h3>
-      <table style="padding-left:160px">
+      <table style="min-width:17em; margin: 0 auto 0 auto;">
         <tr v-for="(c, pos) in allSelections" :key="pos">
           <td>{{ c.name }}</td>
           <td>{{ c.price }}</td>
         </tr>
       </table>
 
-      <div style="border-style:solid">
-        <div style="border-bottom-style:solid">Running Total: ${{ runningTotal }}</div>
-        <div  style="border-bottom-style:solid">Sales Tax: ${{ (runningTotal * 0.06).toFixed(2) }}</div>
-        <div  style="border-bottom-style:solid">Grand Total: ${{ (runningTotal * 1.06).toFixed(2) }}</div>
+      <div style="border-style:solid; margin: 0 10% 0 10%">
+        <div style="border-bottom-style:solid">Running Total: ${{ runningTotal.toFixed(2) }}</div>
+        <div style="border-bottom-style:solid">Sales Tax: ${{ (runningTotal * 0.06).toFixed(2) }}</div>
+        <div style="border-bottom-style:solid">Grand Total: ${{ (runningTotal * 1.06).toFixed(2) }}</div>
       </div>
       <router-link to="/checkout" @click.native="addOrder" replace>Checkout</router-link>
     </section>
@@ -236,18 +236,21 @@ export default class BudgetCategory extends Vue {
 </script>
 
 <style scoped>
+
+#selectionBlock{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: "filterBlock displayBlock cartBlock";
+}
+
 td,
 tr {
   border-style: solid;
 }
 
-table {
-}
-
 .column {
-  float: left;
-  width: 33%;
-  padding: 10px;
+  padding-left: 5%;
+  padding-right: 5%;
 }
 
 .row:after {
@@ -260,12 +263,10 @@ table {
   width: 300px;
   height: 40px;
   margin-top: 20px;
-  font-family: emoji;
 }
 
 .appFilter {
   background-color: lightgoldenrodyellow;
-  font-family: emoji;
 }
 
 .entFilter {
@@ -275,11 +276,9 @@ table {
 
 .desFilter {
   background-color: pink;
-  font-family: emoji;
 }
 
 .sidFilter {
   background-color: lightgray;
-  font-family: emoji;
 }
 </style>
