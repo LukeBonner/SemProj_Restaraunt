@@ -18,8 +18,8 @@
       </div>
     </div>
 
-    <h2>Previous Orders</h2>
-    <table style="
+    <h2 v-if="allOrders.length>1">Previous Orders</h2>
+    <table v-if="allOrders.length>1" style="
       margin-left:auto;
       margin-right:auto;
       background-color:rgb(230, 230, 230);

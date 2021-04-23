@@ -88,7 +88,7 @@
       </table>
 
       <button v-if="this.allSelections.length > 0"
-         class=checkout  @click="$router.replace('/checkout')"
+         class=checkout v-on:click="addOrder"
       >
       Checkout
       </button>
@@ -113,6 +113,7 @@ import "firebase/firestore";
 export default class BudgetCategory extends Vue {
   readonly $appDB!: FirebaseFirestore;
   readonly $appAuth!: FirebaseAuth;
+  $router: any;
 
   private allSelections: any[] = [];
   private allApps: any[] = [];
@@ -154,6 +155,8 @@ export default class BudgetCategory extends Vue {
       total: this.runningTotal,
       grand_total: this.runningTotal * 1.06
     });
+
+    this.$router.replace({ path: "/checkout" });
   }
 
   addToCart(name: string, price: number) {
