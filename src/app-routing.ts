@@ -13,7 +13,7 @@ const myRoutes: Array<RouteConfig> = [
   },
   {
     name: "Selection",
-    path: "/Selection",
+    path: "/selection",
     component: selectionBlock,
   },
   {

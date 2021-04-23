@@ -1,8 +1,8 @@
 <template>
   <div id="app" >
-    <h1 style="color:white; text-shadow: 0 0 3px black; font-weight: normal;">Restaurant and stuff</h1>
+    <h1>Restaurant and stuff</h1>
 
-    <button v-if="userLoggedIn()" v-on:click="doLogout">Logout</button>
+    <button style="font-size:120%;" v-if="userLoggedIn()" v-on:click="doLogout">Logout</button>
     <router-view></router-view>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default class App extends Vue {
 
   doLogout(): void {
   this.$appAuth.signOut();
-  this.$router.back();    // Go backward in the "history stack"
+  this.$router.replace({ path: "/" });    // Go backward in the "history stack"
   }
 
   // This function is automatically called when
@@ -64,5 +64,19 @@ body {
   background-image: url("~@/assets/image.jpg");
   background-size: 100%;
   background-attachment: fixed;
+}
+
+h1, h2, h3 {
+  color:white;
+  text-shadow: 0 0 3px black;
+  font-weight: normal;
+}
+
+button {
+  font-size: 100%;
+  color: #2c3e50;
+  background-color: rgb(230, 230, 230);
+  border: 2px solid #2c3e50;
+  border-radius: 4px;
 }
 </style>

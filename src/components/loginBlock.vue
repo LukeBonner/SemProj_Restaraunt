@@ -1,13 +1,13 @@
 <template>
     <div id="loginBlock">
         <section>
-        <label for="email">Email</label>
-            <input type="text" name="email" id="email" v-model="userEmail"><br><br>
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" v-model="userPassword"><br><br>
-            <button :disabled="noInput" type="button" id="signup" v-on:click="createAccount()">Signup</button>
-            <button :disabled="noInput" type="button" id="signin" v-on:click="authenticate()">Signin</button>
-             <div>{{message}}</div>
+          <label for="email">Email</label>
+          <input type="text" name="email" id="email" v-model="userEmail"><br><br>
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" v-model="userPassword"><br><br>
+          <button :disabled="noInput" type="button" id="signup" v-on:click="createAccount()">Signup</button>
+          <button :disabled="noInput" type="button" id="signin" v-on:click="authenticate()">Signin</button>
+          <div id="message">{{message}}</div>
         </section>
     </div>
 </template>
@@ -38,11 +38,16 @@ export default class myExpense extends Vue{
         .createUserWithEmailAndPassword(this.userEmail, this.userPassword)
         .then((u: UserCredential) => {
             this.showMessage(`User create UID ${u.user?.uid}`);
-            this.$router.push({ path: "/Selection" });
+            this.$router.replace({ path: "/selection" });
             })
         .catch((err: any) => {
-            this.showMessage(`Unable to create account ${err}`);
-            });    
+            let error : string = String(err);
+            console.log(error.slice(0,7));
+            if( error.slice(0,7) === "Error: "){
+              error = error.slice(7);
+            }
+            this.showMessage(`Unable to create account: ${error}`);
+        });    
     }
 
     authenticate(): void {
@@ -50,10 +55,15 @@ export default class myExpense extends Vue{
         .signInWithEmailAndPassword(this.userEmail, this.userPassword)
         .then((u: UserCredential) => {
             this.showMessage(`Login successful UID ${u.user?.uid}`);
-            this.$router.push({ path: "/Selection" });
+            this.$router.replace({ path: "/selection" });
         })
         .catch((err: any) => {
-            this.showMessage(`Unable to login ${err}`);
+            let error : string = String(err);
+            console.log(error.slice(0,7));
+            if( error.slice(0,7) === "Error: "){
+              error = error.slice(7);
+            }
+            this.showMessage(`Unable to create account: ${error}`);
         });
     }
 
@@ -69,5 +79,21 @@ export default class myExpense extends Vue{
 </script>
 
 <style scoped>
+label {
+  font-size: 100%;
+  color: white;
+  text-shadow: 0 0 2px black;
+  margin-right: 10px;
+}
+
+button {
+  margin-right: 15px;
+}
+
+#message{
+  font-size: 115%;
+  color: white;
+  text-shadow: 0 0 2px black;
+}
 
 </style>

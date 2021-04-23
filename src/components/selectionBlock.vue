@@ -13,15 +13,15 @@
       <button class="filterButton" v-on:click="toggleSids">Toggle Sides</button>
     </section>
     <section
-      style="grid-area:displayBlock;background-color:lightblue;"
+      style="grid-area:displayBlock;background-color:lightblue;border-radius:5px;"
       class="column"
     >
-      <h3 class="appFilter">Appetizers</h3>
+      <h3 class="appFilter category">Appetizers</h3>
       <table>
-        <tr v-for="(z, pos) in allApps" :key="pos" class="appFilter">
-          <td style="width:160px" class="appFilter">{{ z.name }}</td>
-          <td style="max-width:350px" class="appFilter">{{ z.description }}</td>
-          <td style="width:57px" class="appFilter">${{ z.price }}</td>
+        <tr v-for="(z, pos) in allApps" :key="pos" class="appFilter menu">
+          <td>{{ z.name }}</td>
+          <td>{{ z.description }}</td>
+          <td>${{ z.price }}</td>
           <td class="appFilter">
             <button v-on:click="addToCart(z.name, z.price)">
               add to order
@@ -30,9 +30,9 @@
         </tr>
       </table>
 
-      <h3 class="entFilter">Entrees</h3>
+      <h3 class="entFilter category">Entrees</h3>
       <table>
-        <tr v-for="(z, pos) in allEntrees" :key="pos" class="entFilter">
+        <tr v-for="(z, pos) in allEntrees" :key="pos" class="entFilter menu">
           <td style="width:160px" class="entFilter">{{ z.name }}</td>
           <td style="max-width:350px" class="entFilter">{{ z.description }}</td>
           <td style="width:57px" class="entFilter">${{ z.price }}</td>
@@ -44,9 +44,9 @@
         </tr>
       </table>
 
-      <h3 class="desFilter">Desserts</h3>
+      <h3 class="desFilter category">Desserts</h3>
       <table>
-        <tr v-for="(z, pos) in allDesserts" :key="pos" class="desFilter">
+        <tr v-for="(z, pos) in allDesserts" :key="pos" class="desFilter menu">
           <td style="width:160px" class="desFilter">{{ z.name }}</td>
           <td style="max-width:350px" class="desFilter">{{ z.description }}</td>
           <td style="width:57px" class="desFilter">${{ z.price }}</td>
@@ -58,9 +58,9 @@
         </tr>
       </table>
 
-      <h3 class="sidFilter">Sides</h3>
+      <h3 class="sidFilter category">Sides</h3>
       <table>
-        <tr v-for="(z, pos) in allSides" :key="pos" class="sidFilter">
+        <tr v-for="(z, pos) in allSides" :key="pos" class="sidFilter menu">
           <td style="width:160px" class="sidFilter">{{ z.name }}</td>
           <td style="max-width:350px" class="sidFilter">{{ z.description }}</td>
           <td style="width:57px" class="sidFilter">${{ z.price }}</td>
@@ -72,21 +72,26 @@
         </tr>
       </table>
     </section>
-    <section style="grid-area:cartBlock; color: white;" class="column">
-      <h3>Cart</h3>
+    <section style="grid-area:cartBlock;" class="column">
+      <h2>Cart</h2>
       <table style="min-width:17em; margin: 0 auto 0 auto;">
         <tr v-for="(c, pos) in allSelections" :key="pos">
-          <td>{{ c.name }}</td>
-          <td>{{ c.price }}</td>
+          <td class="cartItem">{{ c.name }}</td>
+          <td class="cartItem">{{ c.price }}</td>
         </tr>
       </table>
 
-      <div style="border-style:solid; margin: 0 10% 0 10%">
-        <div style="border-bottom-style:solid">Running Total: ${{ runningTotal.toFixed(2) }}</div>
-        <div style="border-bottom-style:solid">Sales Tax: ${{ (runningTotal * 0.06).toFixed(2) }}</div>
-        <div style="border-bottom-style:solid">Grand Total: ${{ (runningTotal * 1.06).toFixed(2) }}</div>
-      </div>
-      <router-link to="/checkout" @click.native="addOrder" replace>Checkout</router-link>
+      <table style="min-width:21em; margin: 8px auto 0 auto">
+        <tr><td class="cartItem">Running Total: ${{ runningTotal.toFixed(2) }}</td></tr>
+        <tr><td class="cartItem">Sales Tax: ${{ (runningTotal * 0.06).toFixed(2) }}</td></tr>
+        <tr><td class="cartItem">Grand Total: ${{ (runningTotal * 1.06).toFixed(2) }}</td></tr>
+      </table>
+
+      <button v-if="this.allSelections.length > 0"
+         class=checkout  @click="$router.replace('/checkout')"
+      >
+      Checkout
+      </button>
     </section>
   </div>
 </template>
@@ -107,6 +112,7 @@ import "firebase/firestore";
 @Component
 export default class BudgetCategory extends Vue {
   readonly $appDB!: FirebaseFirestore;
+  readonly $appAuth!: FirebaseAuth;
 
   private allSelections: any[] = [];
   private allApps: any[] = [];
@@ -116,7 +122,6 @@ export default class BudgetCategory extends Vue {
   private allSides: any[] = [];
   private itemsArr: string[] = [];
   private pricesArr: number[] = []
-  readonly $appAuth!: FirebaseAuth;
   private uid = "none";
 
   toggleApps() {
@@ -143,6 +148,7 @@ export default class BudgetCategory extends Vue {
     this.$appDB
     .collection(`restaurant/orders/${this.uid}`)
     .add({
+      time: (new Date()).toISOString(),
       items: this.itemsArr,
       prices: this.pricesArr,
       total: this.runningTotal,
@@ -160,6 +166,11 @@ export default class BudgetCategory extends Vue {
 
   mounted(): void {
     this.uid = this.$appAuth.currentUser?.uid ?? "none";
+    if(this.uid === "none"){
+      this.$router.back();
+    }
+
+
     console.log(this.uid);
     this.$appDB
       .collection(`/restaurant/menu/Appetizers`)
@@ -239,18 +250,14 @@ export default class BudgetCategory extends Vue {
 
 #selectionBlock{
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 3fr 4fr 3fr;
   grid-template-areas: "filterBlock displayBlock cartBlock";
-}
-
-td,
-tr {
-  border-style: solid;
 }
 
 .column {
   padding-left: 5%;
   padding-right: 5%;
+  margin-top: 10px;
 }
 
 .row:after {
@@ -259,26 +266,56 @@ tr {
   clear: both;
 }
 
-.filterButton {
+button.filterButton {
   width: 300px;
   height: 40px;
   margin-top: 20px;
+  font-size: 100%;
+  color: #2c3e50;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 6px 6px 15px black;
 }
 
-.appFilter {
-  background-color: lightgoldenrodyellow;
+tr.appFilter > td, .appFilter {
+  background-color: rgb(247, 247, 150);
 }
 
-.entFilter {
+tr.entFilter > td, .entFilter {
   background-color: tan;
-  font-family: emoji;
 }
 
-.desFilter {
+tr.desFilter > td, .desFilter {
   background-color: pink;
 }
 
-.sidFilter {
+tr.sidFilter > td, .sidFilter {
   background-color: lightgray;
+}
+
+tr.menu > td, .category {
+  border-style: solid;
+  border-radius: 4px;
+}
+
+tr.menu > :last-child {
+  background-color: lightblue;
+  border-style: none;
+}
+
+tr.menu > td:nth-child(1){
+  width: 160px;
+}
+
+.cartItem {
+  border: 2px solid;
+  border-radius: 4px;
+  background-color: rgb(230, 230, 230);
+}
+
+.checkout {
+  font-size: 120%;
+  color: white;
+  background-color: rgb(255, 100, 52);
 }
 </style>
