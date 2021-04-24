@@ -2,6 +2,14 @@
   <div id="app" >
     <h1>Restaurant and stuff</h1>
 
+    <button 
+      style="font-size:120%; margin-right:15px; color:black; background-color:skyblue;" 
+      v-if="this.showAccountButton()" 
+      v-on:click="gotoAccount"
+    >
+      Return to Home Page
+    </button>
+
     <button style="font-size:120%;" v-if="userLoggedIn()" v-on:click="doLogout">Logout</button>
     <router-view></router-view>
   </div>
@@ -12,6 +20,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import selectionBlock from './components/selectionBlock.vue';
 import checkoutBlock from './components/checkoutBlock.vue';
 import loginBlock from './components/loginBlock.vue';
+import accountBlock from './components/accountBlock.vue';
+import historyBlock from './components/historyBlock.vue';
 import {FirebaseFirestore} from "@firebase/firestore-types"
 import "firebase/firestore";
 import "firebase/auth";
@@ -21,8 +31,9 @@ import { FirebaseAuth,UserCredential } from "@firebase/auth-types";
   components: {
     selectionBlock,
     checkoutBlock,
-    loginBlock
-
+    loginBlock,
+    accountBlock,
+    historyBlock,
   },
 })
 export default class App extends Vue {
@@ -37,6 +48,15 @@ export default class App extends Vue {
   doLogout(): void {
   this.$appAuth.signOut();
   this.$router.replace({ path: "/" });    // Go backward in the "history stack"
+  }
+
+  gotoAccount(): void{
+    this.$router.replace({ path: "/account" });
+  }
+
+  showAccountButton(): boolean{
+    return this.$router.currentRoute.path !== '/' &&
+           this.$router.currentRoute.path !== '/account'
   }
 
   // This function is automatically called when

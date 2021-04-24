@@ -168,9 +168,8 @@ export default class BudgetCategory extends Vue {
   }
 
   mounted(): void {
-    this.uid = this.$appAuth.currentUser?.uid ?? "none";
-    if(this.uid === "none"){
-      this.$router.back();
+    if(! this.$appAuth.currentUser){
+      this.$router.replace({ path: "/" });
     }
 
 

@@ -1,32 +1,38 @@
 <template>
   <div id="checkoutBlock">
-    <h2>Thank you for your Order!</h2>
-    <div id="currentOrder" v-if="allOrders[0]">
-      <div>
-        Items:
-        <div>{{ arrToStr(allOrders[0].items) }}</div>
-      </div>
-      <div>
-        Item Prices:
-        <div>{{ arrToStr(allOrders[0].prices) }}</div>
-      </div>
-      <div>
-        order total: ${{ allOrders[0].total.toFixed(2) }}
-      </div>
-      <div>
-        order total inc. tax: ${{ allOrders[0].grand_total.toFixed(2) }}
-      </div>
-    </div>
 
-    <historyBlock v-bind:ignore-newest="true"></historyBlock>
+    <h2 v-if="ignoreNewest && allOrders.length>1">Previous Orders</h2>
+    <h2 v-if="!ignoreNewest">Order History</h2>
+
+    <table v-if="ignoreNewest ? (allOrders.length>1) : (allOrders.length>0)" style="
+      margin-left:auto;
+      margin-right:auto;
+      background-color:rgb(230, 230, 230);
+      border-style:solid;
+      border-width:6px;
+      border-collapse:collapse;"
+    >
+      <tr>
+        <th>Time</th>
+        <th>Items</th>
+        <th>Prices</th>
+        <th>Total</th>
+        <th>Grand Total</th>
+      </tr>
+
+      <tr v-for="(c, pos) in allOrders.slice(ignoreNewest ? 1 : 0)" :key="pos">
+        <td>{{ localTime(c.time) }}</td>
+        <td>{{ arrToStr(c.items) }}</td>
+        <td>{{ arrToStr(c.prices) }}</td>
+        <td>{{ c.total.toFixed(2) }}</td>
+        <td>{{ c.grand_total.toFixed(2) }}</td>
+      </tr>
+    </table>
   </div>
-
 </template>
 <script lang="ts">
 /* eslint-disable no-alert, no-console */
-import historyBlock from './historyBlock.vue';
-
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import {
   FirebaseFirestore,
   QuerySnapshot,
@@ -38,17 +44,15 @@ import { FirebaseAuth, UserCredential } from "@firebase/auth-types";
 import "firebase/firestore";
 // eslint-disable-next-line
 
-@Component({
-  components: {
-    historyBlock,
-  },
-})
+@Component({})
 export default class checkoutBlock extends Vue {
   readonly $appDB!: FirebaseFirestore;
   private allOrders: any[] = [];
   readonly $appAuth!: FirebaseAuth;
   private uid = "none";
   $router: any;
+
+  @Prop({default: false}) private ignoreNewest!: boolean;
 
   localTime(t : string) : string{
     const d : Date = new Date(t);
@@ -90,25 +94,14 @@ export default class checkoutBlock extends Vue {
 </script>
 
 <style scoped>
-#currentOrder {
-  width: 70%;
-  margin-left: auto;
-  margin-right: auto;
-  background-color:rgb(177, 208, 255);
-  border:8px solid rgb(177, 208, 255);
-  font-size: 115%;
-  border-radius:8px;
+th, td {
+  border-style: solid;
+  border-collapse:collapse;
+  padding: 0.15em 0.5em 0.15em 0.5em;
 }
-#currentOrder > div:first-child{
-  border-bottom-style:solid; 
-  padding:0 0 0.3em 0;
-}
-#currentOrder > div:not(:first-child):not(:last-child) {
-  border-bottom-style:solid; 
-  padding: 0.3em 0 0.3em 0;
-}
-#currentOrder > div:last-child {
-  border-style:none;
-  padding: 0.3em 0 0 0;
+
+tr{
+  border-style: solid;
+  border-collapse:collapse;
 }
 </style>

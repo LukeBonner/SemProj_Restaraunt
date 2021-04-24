@@ -38,7 +38,7 @@ export default class myExpense extends Vue{
         .createUserWithEmailAndPassword(this.userEmail, this.userPassword)
         .then((u: UserCredential) => {
             this.showMessage(`User create UID ${u.user?.uid}`);
-            this.$router.replace({ path: "/selection" });
+            this.$router.replace({ path: "/account" });
             })
         .catch((err: any) => {
             let error : string = String(err);
@@ -55,7 +55,7 @@ export default class myExpense extends Vue{
         .signInWithEmailAndPassword(this.userEmail, this.userPassword)
         .then((u: UserCredential) => {
             this.showMessage(`Login successful UID ${u.user?.uid}`);
-            this.$router.replace({ path: "/selection" });
+            this.$router.replace({ path: "/account" });
         })
         .catch((err: any) => {
             let error : string = String(err);
@@ -72,6 +72,12 @@ export default class myExpense extends Vue{
     setTimeout(() => {    // Auto disappear after 5 seconds
         this.message = "";
     }, 5000);
+    }
+
+    mounted(): void{
+      if(this.$appAuth.currentUser){
+        this.$appAuth.signOut();
+      }
     }
 }
 
