@@ -25,9 +25,9 @@ final chunk on the right (the cart chunk)
 -the cart chunk is the final chunk on the right, which will keep track of
 foods selected by the user, and keep a running sum.  at the bottom of this chunk
 will be a checkout button that will, upon successful query to the server, hide
-the Selection section and display the final section, the checkout Section
+the Selection section and display the final section, the checkout Section.
 
-#checkout Section
+#Checkout Section
 
 the checkout section takes all of the user information and appears after the
 clicking on the checkout button in the selection section.  all that will be displayed
