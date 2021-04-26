@@ -7,7 +7,7 @@ Currently the html of the project is divided into three sections
 The login section will have two text areas and a button that should allow the user
 to enter their username and password.  Upon clicking the log in button, if the
 user's credentials are correct and login is successful, the login section will
-then be hidden and the selection section will appear
+then be hidden and the account section will appear
 
 
 #Selection Section
@@ -32,18 +32,31 @@ the Selection section and display the final section, the checkout Section
 the checkout section takes all of the user information and appears after the
 clicking on the checkout button in the selection section.  all that will be displayed
 here is a thank you message to the user (using username) and a brief display
-of their order and total.
+of their order and total.  includes routing back to the account section
 
+#Account Section
+
+The account section serves as the hub and the initial routing after login, from the hub
+the user can select to check their order history, aswell as start a new order
+which directs them to the selection section.
+
+#History Section
+
+Displays user order history, aswell as allowing the user to clear an order from their
+history, or completely wipe their order history. routes back to account Section.
 
 Mark will be handling:
-  -Sign in
-  -Accounts
-  -Storing orders
+-missing, presumed to have dropped class
 
-Luke will be handling:
-  -UI design
-  -generating from database
-  -github
+Luke worked on:
+ -initial project structure
+ -login
+ -Selection
+ -Checkout
+ -Firebase
+ 
 
-Kevin will be handling:
-  -(awaiting return from medical leave)
+Kevin worked on:
+  -fine tuning (several quality of life additions)
+  -History
+  -Account
