@@ -4,6 +4,16 @@
     <h2 v-if="ignoreNewest && allOrders.length>1">Previous Orders</h2>
     <h2 v-if="!ignoreNewest">Order History</h2>
 
+    <button v-on:click="showAlert=true" v-if="!ignoreNewest && allOrders.length>0">
+      Clear Order History
+    </button>
+
+    <div v-if="showAlert" style="background-color:red; margin-bottom:20px;">
+      <h3 style="color:white;">Are you sure you want to delete all order history? This cannot be undone.</h3>
+      <button v-on:click="clearHistory">Yes</button>
+      <button v-on:click="showAlert=false">No</button>
+    </div>
+
     <table v-if="ignoreNewest ? (allOrders.length>1) : (allOrders.length>0)" style="
       margin-left:auto;
       margin-right:auto;
@@ -30,6 +40,8 @@
     </table>
   </div>
 </template>
+
+
 <script lang="ts">
 /* eslint-disable no-alert, no-console */
 import { Component, Prop, Vue } from "vue-property-decorator";
@@ -42,7 +54,9 @@ import "firebase/firestore";
 
 import { FirebaseAuth, UserCredential } from "@firebase/auth-types";
 import "firebase/firestore";
+import VueApexCharts from "node_modules/vue-apexcharts/dist/vue-apexcharts";
 // eslint-disable-next-line
+
 
 @Component({})
 export default class historyBlock extends Vue {
@@ -50,9 +64,27 @@ export default class historyBlock extends Vue {
   private allOrders: any[] = [];
   readonly $appAuth!: FirebaseAuth;
   private uid = "none";
+  private showAlert = false;
   $router: any;
 
   @Prop({default: false}) private ignoreNewest!: boolean;
+
+  clearHistory(): void {
+    this.showAlert = false;
+
+    if(! this.$appAuth.currentUser){
+      this.$router.replace({ path: "/" });
+      return;
+    }
+
+    this.$appDB
+    .collection(`restaurant/orders/${this.$appAuth.currentUser.uid}`).get()
+    .then((qs: QuerySnapshot) => {
+      qs.forEach((qds: QueryDocumentSnapshot) => {
+        qds.ref.delete();
+      });
+    });
+  }
 
   localTime(t : string) : string{
     const d : Date = new Date(t);
@@ -104,5 +136,9 @@ th, td {
 tr{
   border-style: solid;
   border-collapse:collapse;
+}
+
+button{
+  margin: 6px;
 }
 </style>

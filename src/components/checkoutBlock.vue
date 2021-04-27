@@ -11,10 +11,10 @@
         <div>{{ arrToStr(allOrders[0].prices) }}</div>
       </div>
       <div>
-        order total: ${{ allOrders[0].total.toFixed(2) }}
+        Order Total: ${{ allOrders[0].total.toFixed(2) }}
       </div>
       <div>
-        order total inc. tax: ${{ allOrders[0].grand_total.toFixed(2) }}
+        Order Total inc. Tax: ${{ allOrders[0].grand_total.toFixed(2) }}
       </div>
     </div>
 
@@ -97,6 +97,7 @@ export default class checkoutBlock extends Vue {
   margin-right: auto;
   background-color:rgb(177, 208, 255);
   border:8px solid rgb(177, 208, 255);
+  color:rgb(17, 17, 17);
   font-size: 115%;
   border-radius:8px;
 }
