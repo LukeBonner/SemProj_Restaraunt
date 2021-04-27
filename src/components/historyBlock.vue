@@ -45,7 +45,7 @@ import "firebase/firestore";
 // eslint-disable-next-line
 
 @Component({})
-export default class checkoutBlock extends Vue {
+export default class historyBlock extends Vue {
   readonly $appDB!: FirebaseFirestore;
   private allOrders: any[] = [];
   readonly $appAuth!: FirebaseAuth;
@@ -66,10 +66,11 @@ export default class checkoutBlock extends Vue {
   mounted(): void {
     if(! this.$appAuth.currentUser){
       this.$router.replace({ path: "/" });
+      return;
     }
 
     this.$appDB
-      .collection(`restaurant/orders/${this.uid}`)
+      .collection(`restaurant/orders/${this.$appAuth.currentUser.uid}`)
       .orderBy("time", "desc") //newest comes first
       .onSnapshot((qs: QuerySnapshot) => {
         this.allOrders.splice(0); // remove old data

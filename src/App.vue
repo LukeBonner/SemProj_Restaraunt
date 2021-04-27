@@ -22,9 +22,16 @@ import checkoutBlock from './components/checkoutBlock.vue';
 import loginBlock from './components/loginBlock.vue';
 import accountBlock from './components/accountBlock.vue';
 import historyBlock from './components/historyBlock.vue';
+import editMenuBlock from './components/editMenuBlock.vue';
 import {FirebaseFirestore} from "@firebase/firestore-types"
 import "firebase/firestore";
 import "firebase/auth";
+
+import {
+  QuerySnapshot,
+  QueryDocumentSnapshot,
+  DocumentSnapshot,
+} from "@firebase/firestore-types";
 
 import { FirebaseAuth,UserCredential } from "@firebase/auth-types";
 @Component({
@@ -34,6 +41,7 @@ import { FirebaseAuth,UserCredential } from "@firebase/auth-types";
     loginBlock,
     accountBlock,
     historyBlock,
+    editMenuBlock,
   },
 })
 export default class App extends Vue {

@@ -5,6 +5,7 @@ import selectionBlock from "./components/selectionBlock.vue";
 import checkoutBlock from "./components/checkoutBlock.vue";
 import accountBlock from "./components/accountBlock.vue";
 import historyBlock from "./components/historyBlock.vue";
+import editMenuBlock from "./components/editMenuBlock.vue";
 
 Vue.use(VueRouter);
 
@@ -33,6 +34,11 @@ const myRoutes: Array<RouteConfig> = [
     name: "History",
     path: "/history",
     component: historyBlock,
+  },
+  {
+    name: "EditMenu",
+    path: "/edit-menu",
+    component: editMenuBlock,
   },
 ];
 

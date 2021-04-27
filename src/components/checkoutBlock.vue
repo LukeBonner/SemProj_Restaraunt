@@ -62,10 +62,11 @@ export default class checkoutBlock extends Vue {
   mounted(): void {
     if(! this.$appAuth.currentUser){
       this.$router.replace({ path: "/" });
+      return;
     }
 
     this.$appDB
-      .collection(`restaurant/orders/${this.uid}`)
+      .collection(`restaurant/orders/${this.$appAuth.currentUser.uid}`)
       .orderBy("time", "desc") //newest comes first
       .onSnapshot((qs: QuerySnapshot) => {
         this.allOrders.splice(0); // remove old data

@@ -146,15 +146,17 @@ export default class BudgetCategory extends Vue {
     }
     console.log("user id: "+this.uid);
     
-    this.$appDB
-    .collection(`restaurant/orders/${this.uid}`)
-    .add({
-      time: (new Date()).toISOString(),
-      items: this.itemsArr,
-      prices: this.pricesArr,
-      total: this.runningTotal,
-      grand_total: this.runningTotal * 1.06
-    });
+    if(this.$appAuth.currentUser){
+      this.$appDB
+      .collection(`restaurant/orders/${this.$appAuth.currentUser.uid}`)
+      .add({
+        time: (new Date()).toISOString(),
+        items: this.itemsArr,
+        prices: this.pricesArr,
+        total: this.runningTotal,
+        grand_total: this.runningTotal * 1.06
+      });
+    }
 
     this.$router.replace({ path: "/checkout" });
   }
