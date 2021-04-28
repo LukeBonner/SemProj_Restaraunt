@@ -45,6 +45,11 @@ which directs them to the selection section.
 Displays user order history, aswell as allowing the user to clear an order from their
 history, or completely wipe their order history. routes back to account Section.
 
+#Menu Editing section
+
+Allows users with special priviliges to edit the menu by adding, deleting, and modifying menu items.
+Routes back to the account section
+
 Mark will be handling:
 -missing, presumed to have dropped class
 
@@ -57,6 +62,8 @@ Luke worked on:
  
 
 Kevin worked on:
-  -fine tuning (several quality of life additions)
+  -fine tuning (style improvements and some bug fixes)
   -History
   -Account
+  -Menu Editing
+  -Database rules
