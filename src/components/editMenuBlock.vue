@@ -1,23 +1,43 @@
 <template>
   <div>
-    <button v-on:click="selectedCategory=appetizers; itemIndex=null">Appetizers</button>
-    <button v-on:click="selectedCategory=entrees; itemIndex=null">Entrees</button>
-    <button v-on:click="selectedCategory=desserts; itemIndex=null">Desserts</button>
-    <button v-on:click="selectedCategory=sides; itemIndex=null">Sides</button>
+    <button 
+      v-bind:class="{ active: selectedCategory!==null && selectedCategory.path === `/restaurant/menu/Appetizers` }"
+      v-on:click="selectedCategory=appetizers; selectedItem=null"
+    >
+      Appetizers
+    </button>
+    <button 
+      v-bind:class="{ active: selectedCategory!==null && selectedCategory.path === `/restaurant/menu/Entrees` }"
+      v-on:click="selectedCategory=entrees; selectedItem=null"
+    >
+      Entrees
+      </button>
+    <button 
+      v-bind:class="{ active: selectedCategory!==null && selectedCategory.path === `/restaurant/menu/Deserts` }"
+      v-on:click="selectedCategory=desserts; selectedItem=null"
+    >
+      Desserts
+    </button>
+    <button 
+      v-bind:class="{ active: selectedCategory!==null && selectedCategory.path === `/restaurant/menu/Sides` }"
+      v-on:click="selectedCategory=sides; selectedItem=null"
+    >
+      Sides
+    </button>
 
     <div v-if="selectedCategory !== null">
       <button v-on:click="addItem">Add Item</button>
       <table style="background-color:rgb(230, 230, 230);">
         <tr  
           v-for="(item, pos) in selectedCategory.items" 
-          v-bind:class="{active: itemIndex !== null && itemIndex === pos}" 
+          v-bind:class="{active: selectedItem !== null && selectedItem.id === item.id}" 
           :key="pos"
         >
           <td>{{item.name}}</td>
           <td>{{item.description}}</td>
           <td>{{item.price}}</td>
-          <td><button v-on:click="itemIndex = pos">Select Item</button></td>
-          <td><button v-on:click="deleteItem(pos)">Delete Item</button></td>
+          <td><button v-on:click="selectedItem = item">Select Item</button></td>
+          <td><button v-on:click="deleteItem(item)">Delete Item</button></td>
         </tr>
       </table>
     </div>
@@ -67,7 +87,7 @@ export default class editMenu extends Vue{
   readonly $appAuth!: FirebaseAuth;
 
   selectedCategory: menuCategory | null = null;
-  itemIndex: number | null = null;
+  selectedItem: menuItem | null = null;
 
   appetizers: menuCategory = {path:`/restaurant/menu/Appetizers`, items:[]};
   entrees: menuCategory = {path:`/restaurant/menu/Entrees`, items:[]};
@@ -79,44 +99,47 @@ export default class editMenu extends Vue{
   itemDescr: string = "";
 
   addItem(): void{
-    if(this.selectedCategory !== null){
+    if(this.selectedCategory !== null && this.itemName.length > 0){
+      const p: number = parseFloat(this.itemPrice);
+      if(isNaN(p) || !isFinite(p)){
+        //if price is not well-formed, do not add a new item to menu
+        return;
+      }
       const newItem : any = 
       {
         name: this.itemName,
         description: this.itemDescr,
-        price: parseFloat(this.itemPrice),
+        price: p,
       };
-      this.$appDB.collection(this.selectedCategory.path).doc(this.itemName).set(newItem);
-      this.itemIndex = null;
+      this.$appDB.collection(this.selectedCategory.path).add(newItem);
     }
   }
 
-  deleteItem(pos: number): void{
+  deleteItem(thisItem: menuItem): void{
     if(this.selectedCategory !== null){
-      const id: string = this.selectedCategory.items[pos].id;
+      const id: string = thisItem.id;
       this.$appDB.collection(this.selectedCategory.path).doc(id).delete();
-      this.itemIndex = null;
     }
   }
 
   updateName(): void{
-    if(this.selectedCategory !== null && this.itemIndex !== null){
-      const id: string = this.selectedCategory.items[this.itemIndex].id;
+    if(this.selectedCategory !== null && this.selectedItem !== null){
+      const id: string = this.selectedItem.id;
       this.$appDB.collection(this.selectedCategory.path).doc(id)
         .update({name: this.itemName});
     }
   }
 
   updatePrice(): void{
-    if(this.selectedCategory !== null && this.itemIndex !== null){
-      const id: string = this.selectedCategory.items[this.itemIndex].id;
+    if(this.selectedCategory !== null && this.selectedItem !== null){
+      const id: string = this.selectedItem.id;
       this.$appDB.collection(this.selectedCategory.path).doc(id)
         .update({price: parseFloat(this.itemPrice)})
     }
   }
   updateDescr(): void{
-    if(this.selectedCategory !== null && this.itemIndex !== null){
-      const id: string = this.selectedCategory.items[this.itemIndex].id;
+    if(this.selectedCategory !== null && this.selectedItem !== null){
+      const id: string = this.selectedItem.id;
       this.$appDB.collection(this.selectedCategory.path).doc(id)
         .update({description: this.itemDescr})
     }
@@ -140,6 +163,21 @@ export default class editMenu extends Vue{
             });
           }
         });
+
+        //If the currently selected item has been removed by another user,
+        //set this.selectedItem to null
+        if(this.selectedItem !== null){
+
+          let itemExists = false;
+          for(const i of local.items){
+            if(i.id === this.selectedItem.id) itemExists = true;
+          }
+          if(!itemExists){
+            console.log("Selected item invalidated");
+            this.selectedItem = null;
+          }
+        }
+
       });
   }
 
