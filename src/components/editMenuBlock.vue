@@ -27,7 +27,7 @@
 
     <div v-if="selectedCategory !== null">
       <button v-on:click="addItem">Add Item</button>
-      <table style="background-color:rgb(230, 230, 230);">
+      <table style="background-color:rgb(230, 230, 230); margin-left:auto; margin-right:auto;">
         <tr  
           v-for="(item, pos) in selectedCategory.items" 
           v-bind:class="{active: selectedItem !== null && selectedItem.id === item.id}" 
@@ -199,7 +199,7 @@ export default class editMenu extends Vue{
 
 <style scoped>
 button {
-  margin-left: 15px;
+  margin: 8px;
 }
 
 .active{
